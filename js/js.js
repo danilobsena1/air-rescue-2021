@@ -71,6 +71,6 @@ function start() { // Inicio da função start()
             //Chama função Disparo	
         }
     
-        } // fim da função movejogador()
+    } // fim da função movejogador()
 }
 
