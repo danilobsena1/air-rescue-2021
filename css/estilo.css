@@ -1,0 +1,91 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+/* FONTE UTILIZADA NO JOGO */
+@font-face {
+	font-family:Titulo; /* NOME DA FONTE */
+	src:url(../recursos/fontes/ANODETONOONE.TTF);  /*Local do arquivo*/
+}
+
+h1 {
+	font-family:Titulo;
+	font-size:40px;
+	color: red;
+}
+
+body {
+	background-image:url(../recursos/imagens/virus-gf7ed392a5_1920.jpg);
+    /* Imagem de <a href="https://pixabay.com/pt/users/piro4d-2707530/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4931041">PIRO4D</a> por <a href="https://pixabay.com/pt/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4931041">Pixabay</a> */
+
+}
+
+#container{
+	width:950px;
+	height:auto;
+	position:relative;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+
+#fundoGame {
+	width:950px;
+	height:630px;
+	background-image:url(../recursos/imagens/fundo_game.jpg);
+	
+	border-color:#FFF;
+	border-style: groove;
+
+}
+
+#jogador {
+	width:256px;
+	height:66px;
+	position:absolute;
+	left:8px;
+	top:179px;
+background-image:url(../recursos/imagens/apache.png);
+
+}
+
+#inimigo1 {
+	width: 256px;
+	height: 66px;
+	position: absolute;
+	left: 689px;
+	top: 253px;
+	background-image:url(../recursos/imagens/inimigo1.png);
+	
+}
+
+#inimigo2 {
+	width: 165px;
+	height: 70px;
+	position: absolute;
+	left: 775px;
+	top: 447px;
+	background-image: url(../recursos/imagens/inimigo2.png);
+}
+
+#amigo {
+	width: 44px;
+	height: 51px;
+	position: absolute;
+	left: 10px;
+	top: 464px;
+	background-image:url(../recursos/imagens/amigo.png);
+}
+
+#inicio {
+	width:350px;
+	height:200px;
+	background-color:#FFF;
+ 	margin-left:auto;
+        margin-right:auto;
+ 	margin-top:100px;
+	text-align:center;
+	padding:10px;
+
+}
