@@ -52,7 +52,6 @@ function start() { // Inicio da função start()
 	}
 
     // Função que movimenta o fundo do jogo
-	
 	function movefundo() {
 	
         esquerda = parseInt($("#fundoGame").css("background-position"));
@@ -96,6 +95,20 @@ function start() { // Inicio da função start()
     
     } // fim da função movejogador()
 
+    // Função que movimenta o amigo:
+    function moveamigo() {
+	
+        posicaoX = parseInt($("#amigo").css("left"));
+        $("#amigo").css("left",posicaoX+1);
+                    
+            if (posicaoX>906) {
+                
+            $("#amigo").css("left",0);
+                        
+            }
+    
+    } // fim da função moveamigo()
+
     // Função que movimenta o inimigo1:
     function moveinimigo1() {
 
@@ -113,27 +126,10 @@ function start() { // Inicio da função start()
     // Função que movimenta o inimigo2:
     function moveinimigo2() {
         posicaoX = parseInt($("#inimigo2").css("left"));
-	    $("#inimigo2").css("left",posicaoX-3.2); // inimigo se movimenta 3 unidaes para a esquerda 
+	    $("#inimigo2").css("left",posicaoX-3.2); // inimigo se movimenta 3 unidades para a esquerda 
 				
 		if (posicaoX<=0) {	
 		    $("#inimigo2").css("left",775); // Reposiciona o inimigo2 do lado direito da div
 		    }
     } // Fim da função moveinimigo2()
-
-    // Função que movimenta o amigo:
-    function moveamigo() {
-	
-        posicaoX = parseInt($("#amigo").css("left"));
-        $("#amigo").css("left",posicaoX+1);
-                    
-            if (posicaoX>906) {
-                
-            $("#amigo").css("left",0);
-                        
-            }
-    
-    } // fim da função moveamigo()
-
-
 }
-
