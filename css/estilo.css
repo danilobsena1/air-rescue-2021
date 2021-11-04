@@ -6,7 +6,7 @@
 /* FONTE UTILIZADA NO JOGO */
 @font-face {
 	font-family:Titulo; /* NOME DA FONTE */
-	src:url(../recursos/fontes/ANODETONOONE.TTF);  /*Local do arquivo*/
+	src:url(../recursos/fontes/COMICATE.TTF); /*Local do arquivo*/
 }
 
 h1 {
