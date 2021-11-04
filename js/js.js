@@ -9,7 +9,7 @@ function start() { // Inicio da função start()
 	$("#fundoGame").append("<div id='inimigo2'></div>");
 	$("#fundoGame").append("<div id='amigo' class='anima3'></div>");
 
-    //Principais variáveis do jogo
+    //PRINCIPAIS VARIAVEIS DO JOGO ----------------------------------
 	
 	var jogo = {}
     
@@ -26,6 +26,8 @@ function start() { // Inicio da função start()
 
     jogo.pressionou = []; 
     
+    // ------------------------------------------------------------------------
+
     // Verifica se o usuário pressionou ou não uma tecla
 	$(document).keydown(function(e){
         jogo.pressionou[e.which] = true;
@@ -38,13 +40,14 @@ function start() { // Inicio da função start()
 
 
 	// Game Loop
-
 	jogo.timer = setInterval(loop,30); // chamando a função loop a cada 30 milisegundos.
 	
 	function loop() {
 	    movefundo();
         movejogador();
+        moveamigo();
         moveinimigo1();
+        moveinimigo2();
 
 	}
 
@@ -93,7 +96,7 @@ function start() { // Inicio da função start()
     
     } // fim da função movejogador()
 
-    // Função que movimenta o jogador
+    // Função que movimenta o inimigo1:
     function moveinimigo1() {
 
         posicaoX = parseInt($("#inimigo1").css("left"));
@@ -103,9 +106,34 @@ function start() { // Inicio da função start()
             if (posicaoX<=0) {
             posicaoY = parseInt(Math.random() * 334); // recrie a posiçãoY e posicione no valor randomico
             $("#inimigo1").css("left",694);
-            $("#inimigo1").css("top",posicaoY);
-                
+            $("#inimigo1").css("top",posicaoY);  
             }
     } //Fim da função moveinimigo1()
+
+    // Função que movimenta o inimigo2:
+    function moveinimigo2() {
+        posicaoX = parseInt($("#inimigo2").css("left"));
+	    $("#inimigo2").css("left",posicaoX-3.2); // inimigo se movimenta 3 unidaes para a esquerda 
+				
+		if (posicaoX<=0) {	
+		    $("#inimigo2").css("left",775); // Reposiciona o inimigo2 do lado direito da div
+		    }
+    } // Fim da função moveinimigo2()
+
+    // Função que movimenta o amigo:
+    function moveamigo() {
+	
+        posicaoX = parseInt($("#amigo").css("left"));
+        $("#amigo").css("left",posicaoX+1);
+                    
+            if (posicaoX>906) {
+                
+            $("#amigo").css("left",0);
+                        
+            }
+    
+    } // fim da função moveamigo()
+
+
 }
 
