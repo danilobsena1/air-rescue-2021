@@ -19,6 +19,8 @@ function start() { // Inicio da função start()
         ESPACO: 32
     }
 
+    var podeAtirar=true;
+
     // movimentação do inimigo
     var velocidade=5; // velocidade
     // var posicaoY = parseInt(Math.random() * 334);  O helicoptero inimigo se movimentará no eixo y em varias posições
@@ -48,6 +50,7 @@ function start() { // Inicio da função start()
         moveamigo();
         moveinimigo1();
         moveinimigo2();
+        colisao();
 
 	}
 
@@ -88,9 +91,8 @@ function start() { // Inicio da função start()
         
         if (jogo.pressionou[TECLA.ESPACO]) {
             
-            //Chama função Disparo	
-
-
+            //Chama função Disparo
+            disparo();	
         }
     
     } // fim da função movejogador()
@@ -132,4 +134,47 @@ function start() { // Inicio da função start()
 		    $("#inimigo2").css("left",775); // Reposiciona o inimigo2 do lado direito da div
 		    }
     } // Fim da função moveinimigo2()
+
+    function disparo() {
+	
+        if (podeAtirar==true) { 
+            
+        podeAtirar=false; // Impede que  o usuário atire varias vezes seguidas, enquando o código abaixo está sendo executado.
+        
+        topo = parseInt($("#jogador").css("top")) //posição em cima da helice do helicoptero
+        posicaoX= parseInt($("#jogador").css("left")) // posição lado esquerdo
+        tiroX = posicaoX + 190; 
+        topoTiro=topo+49; //37
+        $("#fundoGame").append("<div id='disparo'></div"); //Criando a div disparo
+        $("#disparo").css("top",topoTiro);
+        $("#disparo").css("left",tiroX);
+        
+        var tempoDisparo=window.setInterval(executaDisparo, 30); // variavel com valor de tempo de disparo
+        
+        } //Fecha podeAtirar
+    
+        function executaDisparo() {
+            posicaoX = parseInt($("#disparo").css("left"));
+            $("#disparo").css("left",posicaoX+15); // fazendo a função caminhar 15 unidades.
+     
+                if (posicaoX>900) {  //Quando o disparo chegar na posição maior que 900
+                            
+                    window.clearInterval(tempoDisparo); // Removendo a variavel de tempo
+                    tempoDisparo=null; // Zerando
+                    $("#disparo").remove(); //Removendo o disparo da tela
+                    podeAtirar=true; // Após o disparo ter sido removido da tela o usuário pode realizar um novo disparo.
+                        
+                }
+            } // Fecha executaDisparo()
+    } // Fecha disparo()
+
+    function colisao() { // Função responsavel por todas as colisões do jogo.
+
+        // Variavel colisao1 vai conter a colisão entre jogador com o inimigo1
+        var colisao1 = ($("#jogador").collision($("#inimigo1")));
+        
+        console.log(colisao1); //Exibindo as informações da colisão
+    
+    } //Fim da função colisao()
+
 }
