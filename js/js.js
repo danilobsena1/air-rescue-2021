@@ -8,6 +8,7 @@ function start() { // Inicio da função start()
 	$("#fundoGame").append("<div id='inimigo1' class='anima2'></div>");
 	$("#fundoGame").append("<div id='inimigo2'></div>");
 	$("#fundoGame").append("<div id='amigo' class='anima3'></div>");
+    $("#fundoGame").append("<div id='energia'></div>");
 
     //PRINCIPAIS VARIAVEIS DO JOGO ----------------------------------
 	
@@ -28,7 +29,9 @@ function start() { // Inicio da função start()
     // var posicaoY = parseInt(Math.random() * 334);  O helicoptero inimigo se movimentará no eixo y em varias posições
     var posicaoY = parseInt(Math.random() * 380);
 
-    jogo.pressionou = []; 
+    jogo.pressionou = [];
+    
+    var energiaAtual=3;
     
     // ------------------------------------------------------------------------
 
@@ -53,6 +56,7 @@ function start() { // Inicio da função start()
         moveinimigo1();
         moveinimigo2();
         colisao();
+        energia();
 
 	}
 
@@ -182,7 +186,9 @@ function start() { // Inicio da função start()
         
         // jogador com o inimigo1
         if (colisao1.length>0) { // Se a variavel colisao1 for maior que 0 houve colisão.
-		
+            
+            energiaAtual--; // perda de energia
+
             //capturando as posições do inimigo
             inimigo1X = parseInt($("#inimigo1").css("left"));
             inimigo1Y = parseInt($("#inimigo1").css("top"));
@@ -196,7 +202,9 @@ function start() { // Inicio da função start()
 
         // jogador com o inimigo2 
         if (colisao2.length>0) { // verificando se houve colisão entre o jogador e o inimigo2
-        
+            
+            energiaAtual--; // perda de energia
+
             inimigo2X = parseInt($("#inimigo2").css("left"));
             inimigo2Y = parseInt($("#inimigo2").css("top"));
             explosao2(inimigo2X,inimigo2Y);
@@ -325,6 +333,32 @@ function start() { // Inicio da função start()
         }
     } // Fim da função reposicionaAmigo()
     
+    //Barra de energia
 
+function energia() {
+	
+    if (energiaAtual==3) {
+        
+        $("#energia").css("background-image", "url(../recursos/imagens/energia3.png)");
+    }
+
+    if (energiaAtual==2) {
+        
+        $("#energia").css("background-image", "url(../recursos/imagens/energia2.png)");
+    }
+
+    if (energiaAtual==1) {
+        
+        $("#energia").css("background-image", "url(../recursos/imagens/energia1.png)");
+    }
+
+    if (energiaAtual==0) {
+        
+        $("#energia").css("background-image", "url(../recursos/imagens/energia0.png)");
+        
+        //Game Over
+    }
+
+} // Fim da função energia()
 
 }
