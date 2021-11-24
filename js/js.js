@@ -8,6 +8,7 @@ function start() { // Inicio da função start()
 	$("#fundoGame").append("<div id='inimigo1' class='anima2'></div>");
 	$("#fundoGame").append("<div id='inimigo2'></div>");
 	$("#fundoGame").append("<div id='amigo' class='anima3'></div>");
+    $("#fundoGame").append("<div id='placar'></div>");
     $("#fundoGame").append("<div id='energia'></div>");
 
     //PRINCIPAIS VARIAVEIS DO JOGO ----------------------------------
@@ -20,18 +21,37 @@ function start() { // Inicio da função start()
         ESPACO: 32
     }
 
-    var podeAtirar=true;
+    //PONTUAÇÕES DO JOGO
+    var pontos = 0;
+    var salvos = 0;
+    var perdidos = 0;
+
+    var podeAtirar = true;
 
     var fimdejogo = false; //Variavel responsavel por verificar se o jogo finalizou ou não.
 
     // movimentação do inimigo
-    var velocidade=5; // velocidade
+    var velocidade = 5; // velocidade
     // var posicaoY = parseInt(Math.random() * 334);  O helicoptero inimigo se movimentará no eixo y em varias posições
     var posicaoY = parseInt(Math.random() * 380);
 
     jogo.pressionou = [];
     
-    var energiaAtual=3;
+    var energiaAtual = 3;
+
+    // VARIAVEIS QUE IDENTIFICAM O SOM DO GAME
+    var somDisparo=document.getElementById("somDisparo");
+    var somExplosao=document.getElementById("somExplosao");
+    var musica=document.getElementById("musica");
+    var somGameover=document.getElementById("somGameover");
+    var somPerdido=document.getElementById("somPerdido");
+    var somResgate=document.getElementById("somResgate");
+
+    
+    //Música em loop
+    musica.addEventListener("ended", function(){ musica.currentTime = 0; musica.play(); }, false);
+    musica.play();
+
     
     // ------------------------------------------------------------------------
 
@@ -50,12 +70,14 @@ function start() { // Inicio da função start()
 	jogo.timer = setInterval(loop,30); // chamando a função loop a cada 30 milisegundos.
 	
 	function loop() {
+
 	    movefundo();
         movejogador();
         moveamigo();
         moveinimigo1();
         moveinimigo2();
         colisao();
+        placar();
         energia();
 
 	}
@@ -143,6 +165,8 @@ function start() { // Inicio da função start()
 
     function disparo() {
 	
+        somDisparo.play(); // TOCANDO O SOM DE DISPARO
+
         if (podeAtirar==true) { 
             
         podeAtirar=false; // Impede que  o usuário atire varias vezes seguidas, enquando o código abaixo está sendo executado.
@@ -180,7 +204,7 @@ function start() { // Inicio da função start()
         var colisao1 = ($("#jogador").collision($("#inimigo1")));
         var colisao2 = ($("#jogador").collision($("#inimigo2")));
         var colisao3 = ($("#disparo").collision($("#inimigo1")));
-        // var colisao4 = ($("#disparo").collision($("#inimigo2"))); helicoptero não dispara no caminhão.
+        // var colisao4 = ($("#disparo").collision($("#inimigo2"))); DISPARO NÃO ACERTA CAMINHÃO
         var colisao5 = ($("#jogador").collision($("#amigo")));
         var colisao6 = ($("#inimigo2").collision($("#amigo")));
         
@@ -202,7 +226,8 @@ function start() { // Inicio da função start()
 
         // jogador com o inimigo2 
         if (colisao2.length>0) { // verificando se houve colisão entre o jogador e o inimigo2
-            
+
+            velocidade=velocidade+0.5; // AUMENTANDO A VELOCIDADE DO INIMIGO CASO ELE SEJA ATINGINDO
             energiaAtual--; // perda de energia
 
             inimigo2X = parseInt($("#inimigo2").css("left"));
@@ -217,6 +242,9 @@ function start() { // Inicio da função start()
             
         // Disparo com o inimigo1
         if (colisao3.length>0) {
+
+            velocidade=velocidade+0.5; // AUMENTANDO A VELOCIDADE DO INIMIGO CASO ELE SEJA ABATIDO
+            pontos=pontos+100; // 100 PONTOS AO ACERTAR O INIMIGO1
               
             inimigo1X = parseInt($("#inimigo1").css("left"));
             inimigo1Y = parseInt($("#inimigo1").css("top"));
@@ -230,14 +258,18 @@ function start() { // Inicio da função start()
         }
 
         // jogador com o amigo
-        if (colisao5.length>0) {    
+        if (colisao5.length>0) {
+            salvos++; // QUANTIDADE DE AMIGOS SALVOS
+            somResgate.play();
+
             reposicionaAmigo();
             $("#amigo").remove();
         }
         
         //Inimigo2 com o amigo
         if (colisao6.length>0) {
-                
+            perdidos++; // ENCONTRO DO INIMIGO2 COM O AMIGO
+            
             amigoX = parseInt($("#amigo").css("left"));
             amigoY = parseInt($("#amigo").css("top"));
             explosao3(amigoX,amigoY);
@@ -251,6 +283,9 @@ function start() { // Inicio da função start()
 
     //Explosão 1
     function explosao1(inimigo1X,inimigo1Y) {
+        
+        somExplosao.play();
+
         $("#fundoGame").append("<div id='explosao1'></div"); //criando nova div explosao1 dentro da div id="fundoGame"
         $("#explosao1").css("background-image", "url(../recursos/imagens/explosao.png)");
         var div=$("#explosao1");
@@ -272,6 +307,9 @@ function start() { // Inicio da função start()
 
     //Explosão2
 	function explosao2(inimigo2X,inimigo2Y) {
+
+        somExplosao.play();
+
         $("#fundoGame").append("<div id='explosao2'></div");
         $("#explosao2").css("background-image", "url(../recursos/imagens/explosao.png)");
         var div2=$("#explosao2");
@@ -292,6 +330,9 @@ function start() { // Inicio da função start()
 
     //Explosão3
     function explosao3(amigoX,amigoY) {
+        
+        somPerdido.play();
+
         $("#fundoGame").append("<div id='explosao3' class='anima4'></div");
         $("#explosao3").css("top",amigoY);
         $("#explosao3").css("left",amigoX);
@@ -332,33 +373,68 @@ function start() { // Inicio da função start()
             }
         }
     } // Fim da função reposicionaAmigo()
+
+    function placar() {
+	
+        $("#placar").html("<h2> Pontos: " + pontos + " Salvos: " + salvos + " Perdidos: " + perdidos + "</h2>");
+        
+    } //fim da função placar()
     
     //Barra de energia
 
-function energia() {
+    function energia() {
+        
+        if (energiaAtual==3) {
+            
+            $("#energia").css("background-image", "url(../recursos/imagens/energia3.png)");
+        }
+
+        if (energiaAtual==2) {
+            
+            $("#energia").css("background-image", "url(../recursos/imagens/energia2.png)");
+        }
+
+        if (energiaAtual==1) {
+            
+            $("#energia").css("background-image", "url(../recursos/imagens/energia1.png)");
+        }
+
+        if (energiaAtual==0) {
+            
+            $("#energia").css("background-image", "url(../recursos/imagens/energia0.png)");
+            
+            //Game Over
+            gameOver();
+        }
+
+    } // Fim da função energia()
+
+    //Função GAME OVER
+	function gameOver() {
+        fimdejogo=true;
+        musica.pause();
+        somGameover.play();
+        
+        window.clearInterval(jogo.timer);
+        jogo.timer=null;
+        
+        $("#jogador").remove();
+        $("#inimigo1").remove();
+        $("#inimigo2").remove();
+        $("#amigo").remove();
+        
+        $("#fundoGame").append("<div id='fim'></div>");
+        
+        $("#fim").html("<h1> Game Over </h1><p>Sua pontuação foi: " + pontos + "</p>" + "<div id='reinicia' onClick=reiniciaJogo()><h3>Jogar Novamente</h3></div>");
+        } // Fim da função gameOver();
+
+} // Fim da função start
+
+//Reinicia o Jogo
+		
+function reiniciaJogo() {
+	somGameover.pause();
+	$("#fim").remove();
+	start();
 	
-    if (energiaAtual==3) {
-        
-        $("#energia").css("background-image", "url(../recursos/imagens/energia3.png)");
-    }
-
-    if (energiaAtual==2) {
-        
-        $("#energia").css("background-image", "url(../recursos/imagens/energia2.png)");
-    }
-
-    if (energiaAtual==1) {
-        
-        $("#energia").css("background-image", "url(../recursos/imagens/energia1.png)");
-    }
-
-    if (energiaAtual==0) {
-        
-        $("#energia").css("background-image", "url(../recursos/imagens/energia0.png)");
-        
-        //Game Over
-    }
-
-} // Fim da função energia()
-
-}
+} //Fim da função reiniciaJogo
